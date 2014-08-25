@@ -41,13 +41,16 @@ class WebWindow(Gtk.Window):
         self._done = False
 
     def _log_message(self, view, msg, line, source_id):
-        print "%s(%d): %s" % (source_id.rsplit("/")[-1], line, msg)
+        source_id = source_id.decode("utf-8")
+        msg = msg.decode("utf-8")
+        print("%s(%d): %s" % (source_id.rsplit("/")[-1], line, msg))
         return True
 
     def set_callback(self, callback):
         self._callback = callback
 
     def _alert_message(self, view, frame, msg):
+        msg = msg.decode("utf-8")
         data = json.loads(msg)
         response_data = self._callback(data)
         if response_data is None:

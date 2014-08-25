@@ -14,6 +14,7 @@
     App.ready(function () {
 
         App.register("event1", function(data) {
+            App.log("fun!");
             $(".navbar").fadeIn(100).fadeOut(100).fadeIn(100);
         });
 
