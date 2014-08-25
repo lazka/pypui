@@ -90,8 +90,10 @@ class Application(object):
 
     def _on_command(self, js):
         name = js["name"]
-        data = js["data"]
-        return self._commands[name](data)
+        args = tuple()
+        if "data" in js:
+            args = (js["data"],)
+        return self._commands[name](*args)
 
     def register(self, command_name):
         """Register a function, exposed in JS"""
@@ -113,6 +115,9 @@ class Application(object):
         """
         raise NotImplementedError
 
+    def quit(self):
+        Gtk.main_quit()
+
     def start(self):
         assert self._path
 
@@ -120,6 +125,10 @@ class Application(object):
         cur_dir = os.path.dirname(os.path.realpath(__file__))
         with open(os.path.join(cur_dir, "api.js"), "rb") as h:
             self._window.execute_script(h.read())
+
+        # register our functions
+        for name in self._commands.keys():
+            self._window.execute_script("PYPUI._register_function('%s');" % name)
 
         # load page
         self._window.load_path(self._path)

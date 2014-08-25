@@ -1,43 +1,44 @@
-var PYPUI = PYPUI || {};
-
-var xxx = {};
-var _ready;
-
-PYPUI.event = {
-    addListener: function(name, callback) {
-        if(!xxx[name])
-            xxx[name] = [];
-
-        xxx[name].push(callback);
-    },
-
-    removeListener: function(el, type, fn) {
-    },
-}
+var PYPUI = {};
+var PYOBJ = {};
 
 PYPUI.log = function (msg) { console.log(msg) }
 
 PYPUI.ready = function(callback) {
-    _ready = callback;
+    PYPUI._ready = callback;
 }
 
-PYPUI._send_response = function (jsondata) {
-    var func = callbacks.shift();
-    if (jsondata === "") {
-        func();
-    } else {
-        func(JSON.parse(jsondata));
-    }
-}
+// private
 
-var callbacks = new Array();
-
-PYPUI.send = function (name, data, callback) {
-    callbacks.push(callback);
+PYPUI._send = function (name, data, callback) {
+    PYPUI._callbacks.push(callback);
     alert(JSON.stringify({"name": name, "data": data}));
 }
 
+
+PYPUI._register_function = function (name) {
+    PYOBJ[name] = function () {
+        var args = [name];
+        for (var i=0; i < arguments.length; i++) {
+            args.push(arguments[i]);
+        }
+        return PYPUI._send.apply(null, args);
+    };
+}
+
+PYPUI._callbacks = [];
+
+PYPUI._send_response = function (jsondata) {
+    var func = PYPUI._callbacks.shift();
+    if (func !== undefined) {
+        if (jsondata === "") {
+            func();
+        } else {
+            func(JSON.parse(jsondata));
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    if(_ready)
-        _ready();
+    if(PYPUI._ready)
+        PYPUI._ready();
 }, false);

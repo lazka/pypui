@@ -11,10 +11,14 @@
     <script>
     PYPUI.ready(function () {
 
+        $("#button-quit").click(function() {
+            PYOBJ.quit();
+        });
+
         $("#target").click(function() {
             var args = {"text": $("#text-target").val()};
 
-            PYPUI.send("foo", args, function(data) {
+            PYOBJ.foo(args, function(data) {
                 $("#text-target").val(JSON.stringify(data));
             });
         });
@@ -25,7 +29,7 @@
 
 <body>
 
- <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+ <div class="navbar navbar-inverse" role="navigation">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -55,6 +59,8 @@
 
         <input type="text" id="text-target" value="blah">
         <input type="button" id="target" value="click me">
+
+        <input type="button" id="button-quit" value="Quit">
 
     </div><!-- /.container -->
 
