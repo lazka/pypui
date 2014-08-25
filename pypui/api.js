@@ -1,7 +1,12 @@
-var PYPUI = {};
-var PYOBJ = {};
+var PYPUI = {"py": {}};
 
-PYPUI.log = function (msg) { console.log(msg) }
+PYPUI.getApp = function () {
+    return PYPUI;
+}
+
+PYPUI.log = function (msg) {
+    console.log(msg)
+}
 
 PYPUI.ready = function(callback) {
     PYPUI._ready = callback;
@@ -29,7 +34,7 @@ PYPUI._send = function (name, data, callback) {
 
 
 PYPUI._register_function = function (name) {
-    PYOBJ[name] = function () {
+    PYPUI.py[name] = function () {
         var args = [name];
         for (var i=0; i < arguments.length; i++) {
             args.push(arguments[i]);

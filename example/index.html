@@ -9,24 +9,26 @@
 
 
     <script>
-    PYPUI.ready(function () {
+    App = PYPUI.getApp();
 
-        PYPUI.register("event1", function(data) {
+    App.ready(function () {
+
+        App.register("event1", function(data) {
             $(".navbar").fadeIn(100).fadeOut(100).fadeIn(100);
         });
 
         $("#button-quit").click(function() {
-            PYOBJ.quit();
+            App.py.quit();
         });
 
         $("#button-fun").click(function() {
-            PYOBJ.fun();
+            App.py.fun();
         });
 
         $("#target").click(function() {
             var args = {"text": $("#text-target").val()};
 
-            PYOBJ.foo(args, function(data) {
+            App.py.foo(args, function(data) {
                 $("#text-target").val(JSON.stringify(data));
             });
         });
