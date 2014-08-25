@@ -23,7 +23,7 @@
 import os
 
 from pypui import Application
-from pgi.repository import Gtk
+from pgi.repository import Gtk, GLib
 
 
 cur_dir = os.path.dirname(os.path.realpath(__file__))
@@ -31,6 +31,11 @@ index = os.path.join(cur_dir, "index.html")
 
 app = Application("myapp", index)
 app.set_title("Some Title")
+
+
+@app.register("fun")
+def fun():
+    app.js.event1()
 
 
 @app.register("quit")

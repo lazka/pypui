@@ -11,8 +11,16 @@
     <script>
     PYPUI.ready(function () {
 
+        PYPUI.register("event1", function(data) {
+            $(".navbar").fadeIn(100).fadeOut(100).fadeIn(100);
+        });
+
         $("#button-quit").click(function() {
             PYOBJ.quit();
+        });
+
+        $("#button-fun").click(function() {
+            PYOBJ.fun();
         });
 
         $("#target").click(function() {
@@ -60,6 +68,7 @@
         <input type="text" id="text-target" value="blah">
         <input type="button" id="target" value="click me">
 
+        <input type="button" id="button-fun" value="Fun!">
         <input type="button" id="button-quit" value="Quit">
 
     </div><!-- /.container -->

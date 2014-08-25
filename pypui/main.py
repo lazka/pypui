@@ -38,6 +38,7 @@ class WebWindow(Gtk.Window):
         self._callback = None
         self._view.connect("console-message", self._log_message)
         self._view.connect("script-alert", self._alert_message)
+        self._done = False
 
     def _log_message(self, view, msg, line, source_id):
         print "%s(%d): %s" % (source_id.rsplit("/")[-1], line, msg)
@@ -53,7 +54,6 @@ class WebWindow(Gtk.Window):
             response = ''
         else:
             response = json.dumps(response_data)
-            response = response.upper()
             response = response.replace("\\", "\\\\")
             response = response.replace("\"", "\\\"")
 
@@ -67,10 +67,31 @@ class WebWindow(Gtk.Window):
 
     def execute_script(self, data):
 
+        if self._done:
+            self._view.execute_script(data)
+            return
+
         def cb(*args):
+            self._done = True
             self._view.execute_script(data)
 
         self._view.connect('load-committed', cb)
+
+
+class JS(object):
+
+    def __init__(self, window):
+        self._window = window
+
+    def __getattr__(self, name):
+        def wrap(*args):
+            json_data = json.dumps(args)
+            json_data = json_data.replace("\\", "\\\\")
+            json_data = json_data.replace("\"", "\\\"")
+            self._window.execute_script(
+                "PYPUI._call_func('%s', '%s');" % (name, json_data))
+
+        return wrap
 
 
 class Application(object):
@@ -84,6 +105,8 @@ class Application(object):
         self._window = WebWindow()
         self._window.set_callback(self._on_command)
         self._window.connect("delete-event", Gtk.main_quit)
+
+        self.js = JS(self._window)
 
         self._path = html_path
         self._commands = {}

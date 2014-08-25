@@ -7,7 +7,20 @@ PYPUI.ready = function(callback) {
     PYPUI._ready = callback;
 }
 
+PYPUI.register = function(name, func) {
+    PYPUI._funcs[name] = func;
+}
+
 // private
+
+PYPUI._funcs = {};
+
+
+PYPUI._call_func = function (name, data) {
+    var func = PYPUI._funcs[name];
+    func(JSON.parse(data));
+}
+
 
 PYPUI._send = function (name, data, callback) {
     PYPUI._callbacks.push(callback);
