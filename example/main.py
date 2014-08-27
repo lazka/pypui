@@ -23,8 +23,9 @@
 import os
 
 from pypui import Application
-from pgi.repository import Gtk, GLib
+from pgi.repository import Gtk, GLib, Notify
 
+Notify.init("foobar")
 
 cur_dir = os.path.dirname(os.path.realpath(__file__))
 index = os.path.join(cur_dir, "index.html")
@@ -35,6 +36,8 @@ app.set_title("Some Title")
 
 @app.register("fun")
 def fun():
+    notif = Notify.Notification.new("foo", "bar", "applications-games")
+    notif.show()
     app.js.event1()
 
 
