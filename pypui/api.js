@@ -46,7 +46,7 @@ PYPUI._register_function = function (name) {
 PYPUI._callbacks = [];
 
 PYPUI._send_response = function (jsondata) {
-    var func = PYPUI._callbacks.shift();
+    var func = PYPUI._callbacks.pop();
     if (func !== undefined) {
         if (jsondata === "") {
             func();
