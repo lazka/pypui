@@ -75,10 +75,11 @@ class WebWindow(Gtk.Window):
             return
 
         def cb(*args):
+            self._view.disconnect(id_)
             self._done = True
             self._view.execute_script(data)
 
-        self._view.connect('load-committed', cb)
+        id_ = self._view.connect('load-committed', cb)
 
 
 class JS(object):
